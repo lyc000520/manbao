@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>满宝成长日记 · 小宝贝</title>
+    <meta name="description" content="满月婴儿写真集：柔和、纯净、温暖的成长瞬间。">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root{
+            --bg:#fffdfb; --card:#ffffff; --text:#3b3b45; --muted:#767685;
+            --primary:#ffd8e1; --primary-strong:#ffb6c9; --accent:#c9e7ff; --accent-2:#e9f7d3;
+            --shadow:0 10px 30px rgba(20,20,40,.08);
+        }
+
+        body{
+            font-family:'Microsoft YaHei',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'PingFang SC','Hiragino Sans GB','WenQuanYi Micro Hei',sans-serif;
+            color:var(--text);
+            background:
+                radial-gradient(1000px 500px at -10% -20%, #fff2f7 0%, rgba(255,242,247,0) 60%),
+                radial-gradient(900px 500px at 110% -10%, #eaf6ff 0%, rgba(234,246,255,0) 60%),
+                radial-gradient(900px 500px at 50% 110%, #f5ffe6 0%, rgba(245,255,230,0) 60%),
+                var(--bg);
+            min-height:100vh; overflow-x:hidden;
+        }
+
+        .header{ position:relative; padding:72px 20px 48px; text-align:center; }
+        .badge{ display:inline-block; padding:6px 12px; border-radius:999px;
+            background:linear-gradient(90deg,var(--primary),var(--accent)); color:#5a5860;
+            font-size:12px; letter-spacing:.08em; box-shadow:var(--shadow); }
+        .title{ margin-top:14px; font-size:40px; line-height:1.2; font-weight:800; letter-spacing:.01em; text-shadow:0 1px 0 rgba(255,255,255,.6); }
+        .subtitle{ margin-top:10px; font-size:16px; color:var(--muted); }
+
+        .hero{ max-width:1100px; margin:32px auto 0; padding:0 20px; }
+        .hero-card{ position:relative; border-radius:24px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.6)); box-shadow:var(--shadow); }
+        .hero-media{ aspect-ratio:16/9; width:100%; background:url('https://images.unsplash.com/photo-1546015945-7e4d6a36d1c8?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat; filter:saturate(1.05) contrast(1.02); }
+        .hero-overlay{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,0) 20%, rgba(255,255,255,.9) 100%); }
+        .hero-caption{ position:absolute; left:24px; bottom:18px; padding:12px 14px; border-radius:14px; background:rgba(255,255,255,.85); backdrop-filter:blur(6px); font-size:14px; color:#6a6a75; box-shadow:var(--shadow); }
+
+        .section{ max-width:1200px; margin:36px auto; padding:0 20px; }
+        .section-title{ font-size:22px; font-weight:700; margin-bottom:16px; }
+        .filters{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+        .filter-btn{ appearance:none; border:0; padding:10px 14px; border-radius:999px; background:#fff; box-shadow:var(--shadow); color:#5c5b66; font-size:13px; cursor:pointer; transition:transform .15s ease, box-shadow .2s ease, background .2s ease; }
+        .filter-btn[aria-pressed="true"]{ background:linear-gradient(90deg,var(--primary),var(--accent)); color:#42414a; }
+        .filter-btn:active{ transform:translateY(1px); }
+
+        .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+        .card{ grid-column:span 4; background:var(--card); border-radius:18px; overflow:hidden; box-shadow:var(--shadow); transition:transform .25s ease, box-shadow .25s ease; }
+        .card:hover{ transform:translateY(-4px); box-shadow:0 20px 40px rgba(20,20,40,.12); }
+        .media{ position:relative; width:100%; aspect-ratio:4/5; background:#f7f7fb; }
+        .media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .meta{ display:flex; justify-content:space-between; align-items:center; padding:12px 12px 12px 14px; }
+        .meta .name{ font-weight:600; font-size:14px; }
+        .meta .tag{ font-size:12px; color:#777787; background:#f7f7fb; padding:6px 8px; border-radius:999px; }
+
+        .lightbox{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(10,10,20,.65); backdrop-filter:blur(4px); z-index:50; }
+        .lightbox.active{ display:flex; }
+        .lightbox img{ max-width:92vw; max-height:86vh; border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,.35); }
+        .lightbox .close{ position:absolute; top:20px; right:20px; background:rgba(255,255,255,.85); border:0; width:38px; height:38px; border-radius:50%; cursor:pointer; box-shadow:var(--shadow); }
+
+        .reveal{ opacity:0; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease; }
+        .reveal.visible{ opacity:1; transform:none; }
+
+        .footer{ text-align:center; color:var(--muted); padding:40px 0 60px; }
+
+        @media (max-width:1100px){ .card{ grid-column:span 6; } }
+        @media (max-width:640px){ .title{ font-size:28px; } .subtitle{ font-size:14px; } .card{ grid-column:span 12; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <span class="badge">满月纪念 · 宝宝成长</span>
+        <h1 class="title">小宝贝的第三个月</h1>
+        <p class="subtitle">一呼一吸，都是新生命的温柔回响</p>
+        <div class="hero">
+            <div class="hero-card reveal">
+                <div class="hero-media" role="img" aria-label="温暖的宝宝主题封面"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-caption">Welcome to the little world · 满月写真集</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <h2 class="section-title">温柔瞬间</h2>
+        <div class="filters" role="tablist" aria-label="主题筛选">
+            <button class="filter-btn" aria-pressed="true" data-filter="all">全部</button>
+            <button class="filter-btn" aria-pressed="false" data-filter="home">八月</button>
+        </div>
+
+        <div class="grid" id="gallery">
+            <div class="card reveal" data-cat="home">
+                <div class="media"><img src="images/2025001.jpg" alt="柔软毛毯上的小手"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+            <div class="card reveal" data-cat="studio">
+                <div class="media"><img src="images/2025002.jpg" alt="淡粉背景的宝宝棚拍"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+            <div class="card reveal" data-cat="detail">
+                <div class="media"><img src="images/2025003.jpg" alt="宝宝脚丫特写"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+            <div class="card reveal" data-cat="home">
+                <div class="media"><img src="images/2025004.jpg" alt="居家自然光下的宝宝"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+            <div class="card reveal" data-cat="studio">
+                <div class="media"><img src="images/2025005.jpg" alt="温暖抱抱"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+            <div class="card reveal" data-cat="detail">
+                <div class="media"><img src="images/2025005.jpg" alt="睡颜特写"></div>
+                <div class="meta"><span class="name">满宝</span><span class="tag">八月</span></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+        <button class="close" aria-label="关闭" id="lbClose">✕</button>
+        <img id="lbImg" alt="预览大图">
+    </div>
+
+    <footer class="footer">© 满月写真 · 愿你健康长大，永远被温柔以待</footer>
+
+    <script>
+        // 过滤
+        const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+        const cards = Array.from(document.querySelectorAll('.card'));
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                btn.setAttribute('aria-pressed', 'true');
+                const cat = btn.dataset.filter;
+                cards.forEach(c => {
+                    const show = cat === 'all' || c.dataset.cat === cat;
+                    c.style.display = show ? '' : 'none';
+                });
+            });
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbClose = document.getElementById('lbClose');
+        cards.forEach(c => {
+            c.querySelector('img').addEventListener('click', e => {
+                lbImg.src = e.currentTarget.src;
+                lbImg.alt = e.currentTarget.alt;
+                lightbox.classList.add('active');
+            });
+        });
+        lbClose.addEventListener('click', () => lightbox.classList.remove('active'));
+        lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('active'); });
+
+        // Reveal on scroll
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(en => {
+                if (en.isIntersecting) {
+                    en.target.classList.add('visible');
+                    io.unobserve(en.target);
+                }
+            });
+        },{ threshold: 0.12 });
+        Array.from(document.querySelectorAll('.reveal')).forEach(el => io.observe(el));
+    </script>
+</body>
+</html>
+
